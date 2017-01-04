@@ -1,0 +1,42 @@
+# LAMMPS Molecular Dynamics Simulator 
+http://lammps.sandia.gov/
+
+
+This directory contains Peter Wirnsberger's contributions to the open-source software package LAMMPS. 
+All source files and examples provided were copied from the LAMMPS (20Oct16) version and are licensed under the GPL-v2.
+For more information on licensing, I refer to the information provided in 'LICENSE' in the root directory of the LAMMPS distribution.
+For the latest version of the source files and information on how to compile the code, please visit 
+the LAMMPS homepage and download the lastest archive.
+
+
+ehex:  
+-----
+
+Implementation of the eHEX/a algorithm proposed by Wirnsberger et al. (2015), 
+which is available under http://dx.doi.org/10.1063/1.4931597 or https://arxiv.org/abs/1507.07081.
+
+The source files are located in ehex/src and a several examples of LAMMPS input scripts along
+with input and output files are provided in the directory ehex/examples. 
+
+
+Abstract of the paper:
+
+We propose a new algorithm for non-equilibrium molecular dynamics simulations of thermal gradients. 
+The algorithm is an extension of the heat exchange algorithm developed by Hafskjold et al. [Mol. Phys. 80, 1389 (1993); 81, 251 (1994)], 
+in which a certain amount of heat is added to one region and removed from another by rescaling velocities appropriately. 
+Since the amount of added and removed heat is the same and the dynamics between velocity rescaling steps is Hamiltonian, 
+the heat exchange algorithm is expected to conserve the energy. However, it has been reported previously that the original version 
+of the heat exchange algorithm exhibits a pronounced drift in the total energy, the exact cause of which remained hitherto unclear. 
+Here, we show that the energy drift is due to the truncation error arising from the operator splitting and 
+suggest an additional coordinate integration step as a remedy. The new algorithm retains all the advantages of the original one 
+whilst exhibiting excellent energy conservation as illustrated for a Lennard-Jones liquid and SPC/E water. 
+
+
+rattle: 
+-------
+
+The source files provided in rattle/src implement the RATTLE algorithm to keep small molecules rigid
+in molecular dynamics simulations [J. Comput. Phys. 52, 24 (1983)]. 
+
+The RATTLE algorithm is also employed by the eHEX/a algorithm and more information on how this is accomplished can 
+be found in the ehex paper (see above).
