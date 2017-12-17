@@ -1,0 +1,52 @@
+
+
+# Point dipoles in a 3d box
+
+units           lj
+atom_style      atomic
+dimension       3
+boundary        p p p
+lattice         fcc 0.75
+region          box block -3 3 -3 3 -3 3
+create_box      1 box
+create_atoms    1 box
+mass            1 1.0
+velocity        all create 1.0 817217 mom yes
+
+pair_style      lj/cut 3.0
+pair_coeff      * * 1.0 1.0
+timestep        0.003
+
+fix             fNVE all nve
+
+# Impose the body force f(z) = -0.06*sign(z) + 0.002*z with a smooth transitions in the intervals
+# [-Lz/2, -Lz/2+2], [-2,2], [Lz/2-2, Lz/2].
+#
+# Synopsis: force/poly/sym:
+#            <<axis>>
+#            <<width of transition region>> 
+#            <<order of polynomial>>
+#            <<coefficients in increasing order>> 
+
+fix 	        force  all force/poly/sym z antisym 3 1 -0.06  0.002
+
+# Remove the average force such that the centre of mass doesn't move
+
+compute         fz             all     property/atom   fz
+compute         fzAvg          all     reduce ave c_fz
+variable        fzBalance      equal  -c_fzAvg
+fix             fzBodyBalance  all     addforce 0.0 0.0 v_fzBalance
+
+# Track the centre of mass motion
+
+variable       vcmx        equal "vcm(all,x)"
+variable       vcmy        equal "vcm(all,y)"
+variable       vcmz        equal "vcm(all,z)"
+variable       vcm2        equal  v_vcmx*v_vcmx+v_vcmy*v_vcmy+v_vcmz*v_vcmz
+
+
+thermo_style    custom step temp pe ke  etotal press v_vcmx v_vcmy v_vcmz v_vcm2
+thermo_modify   norm no
+thermo          100
+
+run             1000
